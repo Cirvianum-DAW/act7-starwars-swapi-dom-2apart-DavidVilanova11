@@ -1,14 +1,19 @@
 import swapi from './swapi.js';
 
 //Exemple d'inicialització de la llista de pel·lícules. Falten dades!
-async function setMovieHeading(movieId, titleSelector) {
+async function setMovieHeading(movieId, titleSelector, infoSelector, directorSelector) {
   // Obtenim els elements del DOM amb QuerySelector
   const title = document.querySelector(titleSelector);
+  const info = document.querySelector(infoSelector);
+  const director = document.querySelector(directorSelector);
+
 
   // Obtenim la informació de la pelicula
   const movieInfo = await swapi.getMovieInfo(movieId);
   // Injectem
   title.innerHTML = movieInfo.name;
+  info.innerHTML = `Episode ${movieInfo.episodeID} - ${movieInfo.release}`;
+  director.innerHTML = `Director: ${movieInfo.director}`;
 }
 
 async function initMovieSelect(selector) {}
