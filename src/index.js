@@ -14,4 +14,4 @@ act7.setMovieSelectCallbacks(
   "#select-homeworld"
 );
 act7.deleteAllCharacterTokens();
-act7.addChangeEventToSelectHomeworld();
+act7.addChangeEventToSelectHomeworld('#select-homeworld', '#select-movie');
