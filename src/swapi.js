@@ -205,6 +205,10 @@ export class Movie {
   }
 }
 
+function getCharacterImage(characterId) {
+  return `assets/people/${characterId}.jpg`;
+}
+
 export default {
   getMovieCount,
   listMovies,
@@ -216,4 +220,5 @@ export default {
   getMovieCharactersAndHomeworlds,
   createMovie,
   _compareByName,
+  getCharacterImage,
 };

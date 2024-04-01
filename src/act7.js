@@ -125,13 +125,13 @@ function setMovieSelectCallbacks(
           const characterCard = document.createElement("li");
           characterCard.classList.add("list__item", "item", "character");
           characterCard.innerHTML = `
-            <img src="assets/user.svg" class="character__image" />
-            <h2 class="character__name">${character.name}</h2>
-            <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
-            <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
-            <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
-            <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
-          `;
+          <img src="assets/people/${character.id}.jpg" class="character__image" />
+          <h2 class="character__name">${character.name}</h2>
+          <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
+          <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
+          <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
+          <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
+        `;
           characterList.appendChild(characterCard);
         });
       } catch (error) {
@@ -183,7 +183,7 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
           const characterCard = document.createElement("li");
           characterCard.classList.add("list__item", "item", "character");
           characterCard.innerHTML = `
-            <img src="assets/user.svg" class="character__image" />
+            <img src="assets/people/${character.id}.jpg" class="character__image" />
             <h2 class="character__name">${character.name}</h2>
             <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
             <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
@@ -198,9 +198,6 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
     }
   });
 }
-
-// Llamar a addChangeEventToSelectHomeworld desde el archivo index.js
-addChangeEventToSelectHomeworld("#select-homeworld", "#select-movie");
 
 async function _createCharacterTokens() {}
 
