@@ -145,20 +145,62 @@ function setMovieSelectCallbacks(
   });
 }
 
-// Llamar a setMovieSelectCallbacks desde el archivo index.js
-setMovieSelectCallbacks(
-  "#select-movie",
-  ".movie__title",
-  ".movie__info",
-  ".movie__director",
-  "#select-homeworld"
-);
-
 function deleteAllCharacterTokens() {}
 
 // EVENT HANDLERS //
 
-function addChangeEventToSelectHomeworld() {}
+function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
+  const homeworldSelectElement = document.querySelector(homeworldSelector);
+  const movieSelectElement = document.querySelector(movieSelector);
+  const characterList = document.querySelector(".list__characters");
+
+  // Añadir un event listener para el cambio en el selector de planetas
+  homeworldSelectElement.addEventListener("change", async function () {
+    // Obtener el valor seleccionado del planeta
+    const selectedHomeworld = homeworldSelectElement.value;
+    const selectedMovieId = movieSelectElement.value;
+
+    // Limpiar las fichas de personajes
+    while (characterList.firstChild) {
+      characterList.removeChild(characterList.firstChild);
+    }
+
+    // Verificar si se han seleccionado valores válidos en ambos selectores
+    if (selectedHomeworld && selectedMovieId) {
+      try {
+        // Obtener personajes y homeworlds de la película seleccionada
+        const charactersAndHomeworlds =
+          await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
+
+        // Filtrar personajes que pertenecen al planeta seleccionado
+        const charactersOnSelectedHomeworld =
+          charactersAndHomeworlds.characters.filter(
+            (character) => character.homeworld === selectedHomeworld
+          );
+
+        // Crear fichas de personajes para los personajes filtrados
+        charactersOnSelectedHomeworld.forEach((character) => {
+          const characterCard = document.createElement("li");
+          characterCard.classList.add("list__item", "item", "character");
+          characterCard.innerHTML = `
+            <img src="assets/user.svg" class="character__image" />
+            <h2 class="character__name">${character.name}</h2>
+            <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
+            <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
+            <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
+            <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
+          `;
+          characterList.appendChild(characterCard);
+        });
+      } catch (error) {
+        console.error("Error fetching characters and homeworlds:", error);
+      }
+    }
+  });
+}
+
+// Llamar a addChangeEventToSelectHomeworld desde el archivo index.js
+addChangeEventToSelectHomeworld("#select-homeworld", "#select-movie");
 
 async function _createCharacterTokens() {}
 
