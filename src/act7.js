@@ -1,12 +1,16 @@
-import swapi from './swapi.js';
+import swapi from "./swapi.js";
 
 //Exemple d'inicialització de la llista de pel·lícules. Falten dades!
-async function setMovieHeading(movieId, titleSelector, infoSelector, directorSelector) {
+async function setMovieHeading(
+  movieId,
+  titleSelector,
+  infoSelector,
+  directorSelector
+) {
   // Obtenim els elements del DOM amb QuerySelector
   const title = document.querySelector(titleSelector);
   const info = document.querySelector(infoSelector);
   const director = document.querySelector(directorSelector);
-
 
   // Obtenim la informació de la pelicula
   const movieInfo = await swapi.getMovieInfo(movieId);
@@ -16,7 +20,35 @@ async function setMovieHeading(movieId, titleSelector, infoSelector, directorSel
   director.innerHTML = `Director: ${movieInfo.director}`;
 }
 
-async function initMovieSelect(selector) {}
+async function initMovieSelect(selector) {
+  const selectElement = document.querySelector(selector);
+
+  // Clear any existing options
+  selectElement.innerHTML = "";
+
+  // Add the default option
+  const defaultOption = document.createElement("option");
+  defaultOption.text = "Selecciona una pel·lícula";
+  defaultOption.value = "";
+  selectElement.appendChild(defaultOption);
+
+  try {
+    // Get sorted list of movies
+    const sortedMovies = await swapi.listMoviesSorted();
+
+    console.log(sortedMovies); // Log the sortedMovies array to inspect it
+
+    // Add options for each movie
+    sortedMovies.forEach((movie) => {
+      const option = document.createElement("option");
+      option.text = movie.name;
+      option.value = movie.id;
+      selectElement.appendChild(option);
+    });
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+  }
+}
 
 function deleteAllCharacterTokens() {}
 

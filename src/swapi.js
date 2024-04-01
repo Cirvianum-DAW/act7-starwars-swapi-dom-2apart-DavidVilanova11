@@ -1,7 +1,7 @@
 //const fetch = require ('node-fetch');
 
 function getMovieCount() {
-  return fetch('https://swapi.info/api/films/')
+  return fetch("https://swapi.info/api/films/")
     .then((res) => res.json())
     .then((res) => res.count);
 }
@@ -22,16 +22,19 @@ function getMovieCount() {
 
 async function listMovies() {
   try {
-    const res = await fetch('https://swapi.info/api/films/');
+    const res = await fetch("https://swapi.info/api/films/");
+
     if (!res.ok) {
-      throw new Error('API request failed');
+      throw new Error("API request failed");
     }
     const data = await res.json();
+
     // Comprovem que hi hagi resposta i que sigui un array
-    if (!data.results || !Array.isArray(data.results)) {
-      throw new Error('API did not return an array');
+    if (!data || !Array.isArray(data)) {
+      throw new Error("API did not return an array");
     }
-    const movies = data.results.map((movie) => ({
+
+    const movies = data.map((movie) => ({
       name: movie.title,
       director: movie.director,
       release: movie.release_date,
@@ -39,13 +42,14 @@ async function listMovies() {
     }));
     return movies;
   } catch (error) {
-    console.error('Error:', error);
+    console.error(error);
     return [];
   }
 }
 
 async function listMoviesSorted() {
   const movies = await listMovies();
+  // console.log(movies);
   return movies.sort(_compareByName);
 }
 
@@ -70,7 +74,7 @@ function getMovieInfo(id) {
 
 function getCharacterName(url) {
   // Necesario para siguientes apartados.
-  url = url.replace('http://', 'https://');
+  url = url.replace("http://", "https://");
   return fetch(url)
     .then((res) => res.json())
     .then((character) => character.name);
@@ -93,7 +97,7 @@ async function _getCharacterNames(movie) {
     movie.characters.map(getCharacterName)
   );
   return characters.map((character) => {
-    if (character.status === 'fulfilled') {
+    if (character.status === "fulfilled") {
       return character.value;
     } else {
       console.error(character.reason);
@@ -107,7 +111,7 @@ async function _getCharacterNamesAndHomeWorlds(movie) {
     movie.characters.map(_getCharacterInfoAndHomeworld)
   );
   return charactersWithHomeWorlds.map((character) => {
-    if (character.status === 'fulfilled') {
+    if (character.status === "fulfilled") {
       return character.value;
     } else {
       console.error(character.reason);
@@ -117,7 +121,7 @@ async function _getCharacterNamesAndHomeWorlds(movie) {
 }
 
 async function _getCharacterInfoAndHomeworld(url) {
-  url = url.replace('http://', 'https://');
+  url = url.replace("http://", "https://");
   try {
     const raw = await fetch(url);
     const res = await raw.json();
@@ -141,7 +145,7 @@ async function _getCharacterInfoAndHomeworld(url) {
 
 async function _getHomeWorldName(url) {
   // Necesario para siguientes apartados.
-  url = url.replace('http://', 'https://');
+  url = url.replace("http://", "https://");
   try {
     const raw = await fetch(url);
     const res = await raw.json();
