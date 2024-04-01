@@ -36,8 +36,6 @@ async function initMovieSelect(selector) {
     // Get sorted list of movies
     const sortedMovies = await swapi.listMoviesSorted();
 
-    console.log(sortedMovies); // Log the sortedMovies array to inspect it
-
     // Add options for each movie
     sortedMovies.forEach((movie) => {
       const option = document.createElement("option");
@@ -50,6 +48,112 @@ async function initMovieSelect(selector) {
   }
 }
 
+function setMovieSelectCallbacks(
+  selector,
+  titleSelector,
+  infoSelector,
+  directorSelector,
+  homeworldSelector
+) {
+  const selectElement = document.querySelector(selector);
+  const homeworldSelectElement = document.querySelector(homeworldSelector);
+  const characterList = document.querySelector(".list__characters");
+
+  // Añadir un event listener para el cambio en el selector de películas
+  selectElement.addEventListener("change", async function () {
+    // Obtener el valor seleccionado
+    const selectedMovieId = selectElement.value;
+
+    // Obtener referencias a los elementos de la capa de la película y homeworld
+    const titleElement = document.querySelector(titleSelector);
+    const infoElement = document.querySelector(infoSelector);
+    const directorElement = document.querySelector(directorSelector);
+
+    // Limpiar el selector de homeworld
+    homeworldSelectElement.innerHTML = "";
+
+    // Limpiar las fichas de personajes
+    while (characterList.firstChild) {
+      characterList.removeChild(characterList.firstChild);
+    }
+
+    // Verificar si se ha seleccionado "Selecciona una película"
+    if (selectedMovieId === "") {
+      // Si se selecciona la opción predeterminada, limpiar la información de la película
+      titleElement.textContent = "";
+      infoElement.textContent = "";
+      directorElement.textContent = "";
+    } else {
+      try {
+        // Obtener la información de la película seleccionada
+        const movieInfo = await swapi.getMovieInfo(selectedMovieId);
+
+        // Mostrar la información de la película en la capa correspondiente
+        titleElement.textContent = movieInfo.name;
+        infoElement.textContent = `Episode ${movieInfo.episodeID} - ${movieInfo.release}`;
+        directorElement.textContent = `Director: ${movieInfo.director}`;
+
+        // Obtener personajes y homeworlds de la película seleccionada
+        const charactersAndHomeworlds =
+          await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
+
+        // Obtener homeworlds de los personajes y eliminar duplicados
+        const uniqueHomeworlds = [
+          ...new Set(
+            charactersAndHomeworlds.characters.map(
+              (character) => character.homeworld
+            )
+          ),
+        ];
+
+        // Agregar la opción "Selecciona un homeworld" al selector de homeworlds
+        const defaultHomeworldOption = document.createElement("option");
+        defaultHomeworldOption.text = "Selecciona un homeworld";
+        defaultHomeworldOption.value = "";
+        homeworldSelectElement.appendChild(defaultHomeworldOption);
+
+        // Agregar los homeworlds al selector de homeworlds
+        uniqueHomeworlds.forEach((homeworld) => {
+          const option = document.createElement("option");
+          option.text = homeworld;
+          option.value = homeworld;
+          homeworldSelectElement.appendChild(option);
+        });
+
+        // Crear fichas de personajes
+        charactersAndHomeworlds.characters.forEach((character) => {
+          const characterCard = document.createElement("li");
+          characterCard.classList.add("list__item", "item", "character");
+          characterCard.innerHTML = `
+            <img src="assets/user.svg" class="character__image" />
+            <h2 class="character__name">${character.name}</h2>
+            <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
+            <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
+            <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
+            <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
+          `;
+          characterList.appendChild(characterCard);
+        });
+      } catch (error) {
+        console.error("Error fetching movie info:", error);
+        // En caso de error, limpiar la información de la película
+        titleElement.textContent = "";
+        infoElement.textContent = "";
+        directorElement.textContent = "";
+      }
+    }
+  });
+}
+
+// Llamar a setMovieSelectCallbacks desde el archivo index.js
+setMovieSelectCallbacks(
+  "#select-movie",
+  ".movie__title",
+  ".movie__info",
+  ".movie__director",
+  "#select-homeworld"
+);
+
 function deleteAllCharacterTokens() {}
 
 // EVENT HANDLERS //
@@ -59,8 +163,6 @@ function addChangeEventToSelectHomeworld() {}
 async function _createCharacterTokens() {}
 
 function _addDivChild(parent, className, html) {}
-
-function setMovieSelectCallbacks() {}
 
 async function _handleOnSelectMovieChanged(event) {}
 

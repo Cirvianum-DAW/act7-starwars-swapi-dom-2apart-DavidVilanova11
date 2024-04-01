@@ -29,12 +29,14 @@ async function listMovies() {
     }
     const data = await res.json();
 
-    // Comprovem que hi hagi resposta i que sigui un array
+    // Comprobamos que haya respuesta y que sea un array
     if (!data || !Array.isArray(data)) {
       throw new Error("API did not return an array");
     }
 
-    const movies = data.map((movie) => ({
+    // Mapeamos los resultados para obtener los datos necesarios de cada película
+    const movies = data.map((movie, index) => ({
+      id: index + 1, // Añadimos un ID único basado en la posición en el array de resultados
       name: movie.title,
       director: movie.director,
       release: movie.release_date,
@@ -49,7 +51,6 @@ async function listMovies() {
 
 async function listMoviesSorted() {
   const movies = await listMovies();
-  // console.log(movies);
   return movies.sort(_compareByName);
 }
 
@@ -64,6 +65,7 @@ function getMovieInfo(id) {
   return fetch(`https://swapi.info/api/films/${id}/`)
     .then((res) => res.json())
     .then((movie) => ({
+      id: id,
       name: movie.title,
       episodeID: movie.episode_id,
       characters: movie.characters,
