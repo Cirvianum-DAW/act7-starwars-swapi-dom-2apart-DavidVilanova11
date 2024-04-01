@@ -120,18 +120,21 @@ function setMovieSelectCallbacks(
           homeworldSelectElement.appendChild(option);
         });
 
-        // Crear fichas de personajes
         charactersAndHomeworlds.characters.forEach((character) => {
+          // Extraer el ID del personaje de la URL
+          const characterUrlParts = character.url.split("/");
+          const characterId = characterUrlParts[characterUrlParts.length - 2];
+
           const characterCard = document.createElement("li");
           characterCard.classList.add("list__item", "item", "character");
           characterCard.innerHTML = `
-          <img src="assets/people/${character.id}.jpg" class="character__image" />
-          <h2 class="character__name">${character.name}</h2>
-          <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
-          <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
-          <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
-          <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
-        `;
+    <img src="assets/people/${characterId}.jpg" class="character__image" />
+    <h2 class="character__name">${character.name}</h2>
+    <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
+    <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
+    <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
+    <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
+  `;
           characterList.appendChild(characterCard);
         });
       } catch (error) {
