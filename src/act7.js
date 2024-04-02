@@ -12,7 +12,7 @@ async function setMovieHeading(
   const info = document.querySelector(infoSelector);
   const director = document.querySelector(directorSelector);
 
-  // Obtenim la informació de la pelicula
+  // Obtenim la informació de la pel·lícula
   const movieInfo = await swapi.getMovieInfo(movieId);
   // Injectem
   title.innerHTML = movieInfo.name;
@@ -23,20 +23,20 @@ async function setMovieHeading(
 async function initMovieSelect(selector) {
   const selectElement = document.querySelector(selector);
 
-  // Clear any existing options
+  // Netejar el selector
   selectElement.innerHTML = "";
 
-  // Add the default option
+  // Afegir l'opció per defecte
   const defaultOption = document.createElement("option");
   defaultOption.text = "Selecciona una pel·lícula";
   defaultOption.value = "";
   selectElement.appendChild(defaultOption);
 
   try {
-    // Get sorted list of movies
+    // Aconseguir pel·lícules ordenades
     const sortedMovies = await swapi.listMoviesSorted();
 
-    // Add options for each movie
+    // Afegir les pel·lícules al selector
     sortedMovies.forEach((movie) => {
       const option = document.createElement("option");
       option.text = movie.name;
@@ -59,48 +59,48 @@ function setMovieSelectCallbacks(
   const homeworldSelectElement = document.querySelector(homeworldSelector);
   const characterList = document.querySelector(".list__characters");
 
-  // Añadir un event listener para el cambio en el selector de películas
+  // Agregar un eventLisenner per el canvi en el selector de pel·licules
   selectElement.addEventListener("change", async function () {
     // Obtener el valor seleccionado
     const selectedMovieId = selectElement.value;
 
-    // Obtener referencias a los elementos de la capa de la película y homeworld
+    // Obtenir les referències dels elements del DOM
     const titleElement = document.querySelector(titleSelector);
     const infoElement = document.querySelector(infoSelector);
     const directorElement = document.querySelector(directorSelector);
 
-    // Limpiar el selector de homeworld
+    // Netejar el selector de homeworlds
     homeworldSelectElement.innerHTML = "";
 
-    // Limpiar las fichas de personajes
+    // Netejar la llista de personatges
     while (characterList.firstChild) {
       characterList.removeChild(characterList.firstChild);
     }
 
-    // Verificar si se ha seleccionado "Selecciona una película"
+    // Verificar si s'ha seleccionat una pel·lícula vàlida
     if (selectedMovieId === "") {
-      // Si se selecciona la opción predeterminada, limpiar la información de la película
+      // Si no s'ha seleccionat cap pel·lícula, netejar la informació de la pel·lícula
       titleElement.textContent = "";
       infoElement.textContent = "";
       directorElement.textContent = "";
     } else {
       try {
-        // Obtener la información de la película seleccionada
+        // Obtenir la informació de la pel·lícula seleccionada
         const movieInfo = await swapi.getMovieInfo(selectedMovieId);
         const characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
 
         console.log("characterIds", characterIds);
 
-        // Mostrar la información de la película en la capa correspondiente
+        // Motrar l'informació de la pel·lícula
         titleElement.textContent = movieInfo.name;
         infoElement.textContent = `Episode ${movieInfo.episodeID} - ${movieInfo.release}`;
         directorElement.textContent = `Director: ${movieInfo.director}`;
 
-        // Obtener personajes y homeworlds de la película seleccionada
+        // Obtenir personatges i homeworlds de la pel·lícula seleccionada
         const charactersAndHomeworlds =
           await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
 
-        // Obtener homeworlds de los personajes y eliminar duplicados
+        // Obtenir els homeworlds únics dels personatges
         const uniqueHomeworlds = [
           ...new Set(
             charactersAndHomeworlds.characters.map(
@@ -109,13 +109,13 @@ function setMovieSelectCallbacks(
           ),
         ];
 
-        // Agregar la opción "Selecciona un homeworld" al selector de homeworlds
+        // Afegir l'opció per defecte al selector de homeworlds
         const defaultHomeworldOption = document.createElement("option");
         defaultHomeworldOption.text = "Selecciona un homeworld";
         defaultHomeworldOption.value = "";
         homeworldSelectElement.appendChild(defaultHomeworldOption);
 
-        // Agregar los homeworlds al selector de homeworlds
+        // Afegir els homeworlds únics al selector de homeworlds
         uniqueHomeworlds.forEach((homeworld) => {
           const option = document.createElement("option");
           option.text = homeworld;
@@ -161,31 +161,31 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
   const movieSelectElement = document.querySelector(movieSelector);
   const characterList = document.querySelector(".list__characters");
 
-  // Añadir un event listener para el cambio en el selector de planetas
+  // Afegir un eventListener per al canvi en el selector de homeworlds
   homeworldSelectElement.addEventListener("change", async function () {
-    // Obtener el valor seleccionado del planeta
+    // Obtindre els valors seleccionats al selector de homeworlds i pel·lícules
     const selectedHomeworld = homeworldSelectElement.value;
     const selectedMovieId = movieSelectElement.value;
 
-    // Limpiar las fichas de personajes
+    // Netejar la llista de personatges
     while (characterList.firstChild) {
       characterList.removeChild(characterList.firstChild);
     }
 
-    // Verificar si se han seleccionado valores válidos en ambos selectores
+    // Verificar si s'han seleccionat un homeworld i una pel·lícula vàlids
     if (selectedHomeworld && selectedMovieId) {
       try {
-        // Obtener personajes y homeworlds de la película seleccionada
+        // Obtenir la informació de la pel·lícula seleccionada
         const charactersAndHomeworlds = await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
           const characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
 
-        // Filtrar personajes que pertenecen al planeta seleccionado
+        // Filtrar els personatges per homeworld
         const charactersOnSelectedHomeworld =
           charactersAndHomeworlds.characters.filter(
             (character) => character.homeworld === selectedHomeworld
           );
 
-        // Crear fichas de personajes para los personajes filtrados
+        // Crear els tokens dels personatges que viuen al homeworld seleccionat
         let counter = 0;
         charactersAndHomeworlds.characters.forEach((character) => {
 
