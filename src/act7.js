@@ -177,7 +177,11 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
       try {
         // Obtenir la informació de la pel·lícula seleccionada
         const charactersAndHomeworlds = await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
-          const characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
+        
+        const movieInfo = await swapi.getMovieInfo(selectedMovieId);
+        const characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
+
+        console.log("characterIds", characterIds);
 
         // Filtrar els personatges per homeworld
         const charactersOnSelectedHomeworld =
