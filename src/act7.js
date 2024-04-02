@@ -199,8 +199,8 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
           );
 
           characterIds = charactersOnSelectedHomeworld.map((character) => character.url.split("/")[5]); // HAig d'aconseguir això ******
-
-            console.log("charactersOnSelectedHomeworld", charactersOnSelectedHomeworld);
+          
+          console.log("characterIds", characterIds);
 
         // Crear els tokens dels personatges que viuen al homeworld seleccionat
         let counter = 0;
