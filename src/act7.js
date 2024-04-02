@@ -188,7 +188,7 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
         const charactersAndHomeworlds = await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
         
         const movieInfo = await swapi.getMovieInfo(selectedMovieId);
-        const characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
+        let characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
 
         console.log("characterIds", characterIds);
 
