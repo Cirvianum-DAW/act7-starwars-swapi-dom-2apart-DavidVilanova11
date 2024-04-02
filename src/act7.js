@@ -59,10 +59,15 @@ function setMovieSelectCallbacks(
   const homeworldSelectElement = document.querySelector(homeworldSelector);
   const characterList = document.querySelector(".list__characters");
 
+  // Netejar els personatges del DOM
+  characterList.innerHTML = "";
+
   // Agregar un eventLisenner per el canvi en el selector de pel·licules
   selectElement.addEventListener("change", async function () {
     // Obtener el valor seleccionado
     const selectedMovieId = selectElement.value;
+
+    console.log("selectedMovieId", selectedMovieId);
 
     // Obtenir les referències dels elements del DOM
     const titleElement = document.querySelector(titleSelector);
@@ -161,6 +166,10 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
   const movieSelectElement = document.querySelector(movieSelector);
   const characterList = document.querySelector(".list__characters");
 
+  // Netejar els personatges del DOM
+  characterList.innerHTML = "";
+
+
   // Afegir un eventListener per al canvi en el selector de homeworlds
   homeworldSelectElement.addEventListener("change", async function () {
     // Obtindre els valors seleccionats al selector de homeworlds i pel·lícules
@@ -183,18 +192,23 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
 
         console.log("characterIds", characterIds);
 
-        // Filtrar els personatges per homeworld
+        // Filtrar els personatges per homeworld seleccionat ***
         const charactersOnSelectedHomeworld =
           charactersAndHomeworlds.characters.filter(
             (character) => character.homeworld === selectedHomeworld
           );
 
+          characterIds = charactersOnSelectedHomeworld.map((character) => character.url.split("/")[5]); // HAig d'aconseguir això ******
+
+            console.log("charactersOnSelectedHomeworld", charactersOnSelectedHomeworld);
+
         // Crear els tokens dels personatges que viuen al homeworld seleccionat
         let counter = 0;
-        charactersAndHomeworlds.characters.forEach((character) => {
+        charactersOnSelectedHomeworld.characters.forEach((character) => {
 
           const characterCard = document.createElement("li");
           characterCard.classList.add("list__item", "item", "character");
+          // Aquí segurament no funcioni agafar el id dels personatges de la mateixa manera que abans *********
           characterCard.innerHTML = `
           <img src="assets/people/${characterIds[counter]}.jpg" class="character__image" />
           <h2 class="character__name">${character.name}</h2>
