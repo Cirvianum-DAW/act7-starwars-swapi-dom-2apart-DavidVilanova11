@@ -87,6 +87,9 @@ function setMovieSelectCallbacks(
       try {
         // Obtener la información de la película seleccionada
         const movieInfo = await swapi.getMovieInfo(selectedMovieId);
+        const characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
+
+        console.log("characterIds", characterIds);
 
         // Mostrar la información de la película en la capa correspondiente
         titleElement.textContent = movieInfo.name;
@@ -120,22 +123,23 @@ function setMovieSelectCallbacks(
           homeworldSelectElement.appendChild(option);
         });
 
+        let counter = 0;
         charactersAndHomeworlds.characters.forEach((character) => {
-          // Extraer el ID del personaje de la URL
-          const characterUrlParts = character.url.split("/");
-          const characterId = characterUrlParts[characterUrlParts.length - 2];
 
           const characterCard = document.createElement("li");
           characterCard.classList.add("list__item", "item", "character");
           characterCard.innerHTML = `
-    <img src="assets/people/${characterId}.jpg" class="character__image" />
-    <h2 class="character__name">${character.name}</h2>
-    <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
-    <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
-    <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
-    <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
-  `;
+          <img src="assets/people/${characterIds[counter]}.jpg" class="character__image" />
+          <h2 class="character__name">${character.name}</h2>
+          <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
+          <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
+          <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
+          <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
+        `;
+
           characterList.appendChild(characterCard);
+          counter++;
+
         });
       } catch (error) {
         console.error("Error fetching movie info:", error);
@@ -172,8 +176,8 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
     if (selectedHomeworld && selectedMovieId) {
       try {
         // Obtener personajes y homeworlds de la película seleccionada
-        const charactersAndHomeworlds =
-          await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
+        const charactersAndHomeworlds = await swapi.getMovieCharactersAndHomeworlds(selectedMovieId);
+          const characterIds = movieInfo.characters.map((url) => url.split("/")[5]);
 
         // Filtrar personajes que pertenecen al planeta seleccionado
         const charactersOnSelectedHomeworld =
@@ -182,18 +186,22 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
           );
 
         // Crear fichas de personajes para los personajes filtrados
-        charactersOnSelectedHomeworld.forEach((character) => {
+        let counter = 0;
+        charactersAndHomeworlds.characters.forEach((character) => {
+
           const characterCard = document.createElement("li");
           characterCard.classList.add("list__item", "item", "character");
           characterCard.innerHTML = `
-            <img src="assets/people/${character.id}.jpg" class="character__image" />
-            <h2 class="character__name">${character.name}</h2>
-            <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
-            <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
-            <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
-            <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
-          `;
+          <img src="assets/people/${characterIds[counter]}.jpg" class="character__image" />
+          <h2 class="character__name">${character.name}</h2>
+          <div class="character__birth"><strong>Birth Year:</strong> ${character.birth_year}</div>
+          <div class="character__eye"><strong>Eye color:</strong> ${character.eye_color}</div>
+          <div class="character__gender"><strong>Gender:</strong> ${character.gender}</div>
+          <div class="character__home"><strong>Home World:</strong> ${character.homeworld}</div>
+        `;
+
           characterList.appendChild(characterCard);
+          counter++;
         });
       } catch (error) {
         console.error("Error fetching characters and homeworlds:", error);
