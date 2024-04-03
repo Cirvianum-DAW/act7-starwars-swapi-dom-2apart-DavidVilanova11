@@ -202,9 +202,11 @@ function addChangeEventToSelectHomeworld(homeworldSelector, movieSelector) {
           
           console.log("characterIds", characterIds);
 
+          console.log("charactersOnSelectedHomeworld", charactersOnSelectedHomeworld);
+
         // Crear els tokens dels personatges que viuen al homeworld seleccionat
         let counter = 0;
-        charactersOnSelectedHomeworld.characters.forEach((character) => {
+        charactersOnSelectedHomeworld.forEach((character) => {
 
           const characterCard = document.createElement("li");
           characterCard.classList.add("list__item", "item", "character");
