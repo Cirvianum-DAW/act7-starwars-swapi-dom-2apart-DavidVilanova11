@@ -245,6 +245,8 @@ function _filmIdToEpisodeId(episodeID) {}
 // "https://swapi.dev/api/films/5/" --> Episode_id = 2 (Attack of the Clones)
 // "https://swapi.dev/api/films/6/" --> Episode_id = 3 (Revenge of the Sith)
 
+
+// No ho he utilitzat perquè he assignat els id's manualment
 let episodeToMovieIDs = [
   { m: 1, e: 4 },
   { m: 2, e: 5 },
